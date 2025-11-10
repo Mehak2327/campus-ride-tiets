@@ -9,6 +9,18 @@ import MapPanel from '@/components/MapPanel';
 import { toast } from 'sonner';
 
 export default function DriverDashboard() {
+  const demoStep = useAppStore(s => s.demoStep);
+if (demoStep === 'idle') {
+  return (
+    <div className="p-6 text-center">
+      <h2 className="text-xl font-semibold">System Offline</h2>
+      <p className="text-gray-400">
+        Please ask Admin to Seed Data to start the system.
+      </p>
+    </div>
+  );
+}
+
   const navigate = useNavigate();
   const currentUser = useAppStore((state) => state.currentUser);
   const drivers = useAppStore((state) => state.drivers);
