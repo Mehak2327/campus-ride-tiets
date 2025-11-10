@@ -16,6 +16,8 @@ export interface Student {
   drop: string;
   poolId?: string;
   status: 'waiting' | 'pooled' | 'assigned' | 'enroute' | 'completed';
+  // NEW: hex color for map pin
+  color?: string;
 }
 
 export interface Driver {
@@ -57,8 +59,10 @@ interface AppState {
   pools: Pool[];
   trips: Trip[];
   demoStep: 'idle' | 'seeded' | 'pooled' | 'assigned' | 'verified' | 'moving' | 'completed';
-  
+
   setCurrentUser: (user: { role: 'student' | 'driver' | 'admin'; id: string } | null) => void;
+
+  // --- Admin demo controls (UNCHANGED) ---
   seedDemo: () => void;
   createPools: () => void;
   assignDrivers: () => void;
@@ -66,10 +70,12 @@ interface AppState {
   startTrips: () => void;
   completeTrips: () => void;
   updateTripProgress: (tripId: string, progress: number, position: [number, number]) => void;
+
+  // NEW: student-only mini demo (does not touch admin flow)
+  initStudentOnlyDemo: () => void;
+
   resetDemo: () => void;
 }
-
-const TIET_CENTER = { lat: 30.3558, lng: 76.3651 };
 
 const initialHotspots: Hotspot[] = [
   { id: 'main-gate', name: 'Main Gate', lat: 30.3570, lng: 76.3660 },
@@ -77,6 +83,8 @@ const initialHotspots: Hotspot[] = [
   { id: 'vyom-hall', name: 'VYOM HALL', lat: 30.3560, lng: 76.3650 },
   { id: 'c-block', name: 'C Block', lat: 30.3555, lng: 76.3665 },
   { id: 'venture-lab', name: 'Venture Lab', lat: 30.3565, lng: 76.3670 },
+  // NEW: for girls residence
+  { id: 'pg-hostel', name: 'PG Hostel', lat: 30.3553, lng: 76.3719 },
 ];
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -90,9 +98,9 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   setCurrentUser: (user) => set({ currentUser: user }),
 
+  // ------------------ ADMIN DEMO (your original behavior) ------------------
   seedDemo: () => {
     const students: Student[] = [
-      // 7 students at AMRITAM HALL
       { id: 's1', name: 'Ishaan Sharma', roll: '102303795', hostel: 'AMRITAM', pickup: 'amritam-hall', drop: 'c-block', status: 'waiting' },
       { id: 's2', name: 'Mehak Arora', roll: '102303801', hostel: 'AMRITAM', pickup: 'amritam-hall', drop: 'c-block', status: 'waiting' },
       { id: 's3', name: 'Abhiram Singh', roll: '102303812', hostel: 'AMRITAM', pickup: 'amritam-hall', drop: 'c-block', status: 'waiting' },
@@ -100,17 +108,12 @@ export const useAppStore = create<AppState>((set, get) => ({
       { id: 's5', name: 'Aarav Gupta', roll: '102303834', hostel: 'AMRITAM', pickup: 'amritam-hall', drop: 'venture-lab', status: 'waiting' },
       { id: 's6', name: 'Kabir Malhotra', roll: '102303856', hostel: 'AMRITAM', pickup: 'amritam-hall', drop: 'venture-lab', status: 'waiting' },
       { id: 's7', name: 'Ananya Nanda', roll: '102303867', hostel: 'AMRITAM', pickup: 'amritam-hall', drop: 'venture-lab', status: 'waiting' },
-      
-      // 1 student at VYOM HALL
       { id: 's8', name: 'Riya Verma', roll: '102303845', hostel: 'VYOM', pickup: 'vyom-hall', drop: 'venture-lab', status: 'waiting' },
     ];
 
     const drivers: Driver[] = [
-      // Driver positioned away from students (will move to pickup)
       { id: 'd1', name: 'Raj Kumar', plate: 'PB11-ER-4101', lat: 30.3538, lng: 76.3635, status: 'idle' },
-      // Driver positioned away from students (will move to pickup)
       { id: 'd2', name: 'Anil Verma', plate: 'PB11-ER-4102', lat: 30.3540, lng: 76.3638, status: 'idle' },
-      // Driver at Main Gate (stays idle throughout)
       { id: 'd3', name: 'Surinder Pal', plate: 'PB11-ER-4103', lat: 30.3570, lng: 76.3660, status: 'idle' },
     ];
 
@@ -119,11 +122,10 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   createPools: () => {
     const { students } = get();
-    
     const pools: Pool[] = [
       {
         id: 'pool-1',
-        studentIds: ['s1', 's2', 's3', 's4'], // 4 students from AMRITAM HALL to C Block
+        studentIds: ['s1', 's2', 's3', 's4'],
         pickup: 'amritam-hall',
         drop: 'c-block',
         otp: '123456',
@@ -132,8 +134,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       },
       {
         id: 'pool-2',
-        studentIds: ['s5', 's6', 's7', 's8'], // 3 from AMRITAM + 1 from VYOM to Venture Lab
-        pickup: 'amritam-hall', // Start at AMRITAM
+        studentIds: ['s5', 's6', 's7', 's8'],
+        pickup: 'amritam-hall',
         drop: 'venture-lab',
         otp: '789012',
         otpVerified: false,
@@ -143,10 +145,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     const updatedStudents = students.map(s => {
       const pool = pools.find(p => p.studentIds.includes(s.id));
-      if (pool) {
-        return { ...s, poolId: pool.id, status: 'pooled' as const };
-      }
-      return s;
+      return pool ? { ...s, poolId: pool.id, status: 'pooled' as const } : s;
     });
 
     set({ pools, students: updatedStudents, demoStep: 'pooled' });
@@ -154,9 +153,6 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   assignDrivers: () => {
     const { pools, drivers } = get();
-    
-    // Pool 1: d1 -> AMRITAM HALL (pickup 4) -> C Block
-    // Pool 2: d2 -> AMRITAM HALL (pickup 3) -> VYOM HALL (pickup 1) -> Venture Lab
     const poolAssignments = [
       { poolId: 'pool-1', driverId: 'd1' },
       { poolId: 'pool-2', driverId: 'd2' },
@@ -164,203 +160,163 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     const updatedPools = pools.map(pool => {
       const assignment = poolAssignments.find(a => a.poolId === pool.id);
-      return {
-        ...pool,
-        driverId: assignment?.driverId,
-        status: 'assigned' as const,
-      };
+      return { ...pool, driverId: assignment?.driverId, status: 'assigned' as const };
     });
 
     const updatedDrivers = drivers.map(driver => {
       const assignment = poolAssignments.find(a => a.driverId === driver.id);
-      if (assignment) {
-        return {
-          ...driver,
-          status: 'assigned' as const,
-          assignedPoolId: assignment.poolId,
-        };
-      }
-      return driver; // d3 stays idle
+      return assignment ? { ...driver, status: 'assigned' as const, assignedPoolId: assignment.poolId } : driver;
     });
 
     const updatedStudents = get().students.map(s => {
       const pool = updatedPools.find(p => p.studentIds.includes(s.id));
-      if (pool && pool.driverId) {
-        return { ...s, status: 'assigned' as const };
-      }
-      return s;
+      return pool && pool.driverId ? { ...s, status: 'assigned' as const } : s;
     });
 
-    // Create realistic routes following roads
     const trips: Trip[] = updatedPools.map(pool => {
       if (pool.id === 'pool-1') {
-        // Pool 1: Driver starts away → AMRITAM HALL (pickup 4 students) → C Block
         return {
           id: `trip-${pool.id}`,
           poolId: pool.id,
           driverId: pool.driverId!,
           route: [
-            [30.3538, 76.3635], // Driver starting position (away from students)
-            [30.3540, 76.3637], // Road waypoint
-            [30.3542, 76.3638], // Road waypoint
-            [30.3543, 76.3639], // Road waypoint
-            [30.3545, 76.3640], // AMRITAM HALL - pickup 4 students
-            [30.3546, 76.3642], // Road waypoint
-            [30.3548, 76.3645], // Road waypoint
-            [30.3549, 76.3648], // Road waypoint
-            [30.3550, 76.3652], // Road waypoint
-            [30.3552, 76.3657], // Road waypoint
-            [30.3553, 76.3660], // Road waypoint
-            [30.3554, 76.3663], // Road waypoint
-            [30.3555, 76.3665], // C Block - drop all 4 students
-          ],
-          progress: 0,
-          status: 'pending',
-        };
-      } else {
-        // Pool 2: Driver starts away → AMRITAM (pickup 3) → VYOM (pickup 1) → Venture Lab
-        return {
-          id: `trip-${pool.id}`,
-          poolId: pool.id,
-          driverId: pool.driverId!,
-          route: [
-            [30.3540, 76.3638], // Driver starting position (away from students)
-            [30.3542, 76.3639], // Road waypoint
-            [30.3544, 76.3640], // Road waypoint
-            [30.3545, 76.3640], // AMRITAM HALL - pickup 3 students
-            [30.3547, 76.3642], // Road waypoint
-            [30.3549, 76.3644], // Road waypoint
-            [30.3552, 76.3646], // Road waypoint
-            [30.3555, 76.3648], // Road waypoint
-            [30.3558, 76.3649], // Road waypoint
-            [30.3560, 76.3650], // VYOM HALL - pickup 1 student
-            [30.3561, 76.3653], // Road waypoint
-            [30.3562, 76.3657], // Road waypoint
-            [30.3563, 76.3662], // Road waypoint
-            [30.3564, 76.3666], // Road waypoint
-            [30.3565, 76.3670], // Venture Lab - drop all 4 students
+            [30.3538, 76.3635],
+            [30.3540, 76.3637],
+            [30.3542, 76.3638],
+            [30.3543, 76.3639],
+            [30.3545, 76.3640],
+            [30.3546, 76.3642],
+            [30.3548, 76.3645],
+            [30.3549, 76.3648],
+            [30.3550, 76.3652],
+            [30.3552, 76.3657],
+            [30.3553, 76.3660],
+            [30.3554, 76.3663],
+            [30.3555, 76.3665], // C Block
           ],
           progress: 0,
           status: 'pending',
         };
       }
+      return {
+        id: `trip-${pool.id}`,
+        poolId: pool.id,
+        driverId: pool.driverId!,
+        route: [
+          [30.3540, 76.3638],
+          [30.3542, 76.3639],
+          [30.3544, 76.3640],
+          [30.3545, 76.3640], // Amritam
+          [30.3560, 76.3650], // Vyom
+          [30.3565, 76.3670], // Venture Lab
+        ],
+        progress: 0,
+        status: 'pending',
+      };
     });
 
-    set({ 
-      pools: updatedPools, 
-      drivers: updatedDrivers, 
+    set({
+      pools: updatedPools,
+      drivers: updatedDrivers,
       students: updatedStudents,
       trips,
-      demoStep: 'assigned' 
+      demoStep: 'assigned',
     });
   },
 
   verifyOtp: (poolId, code) => {
     const { pools } = get();
     const pool = pools.find(p => p.id === poolId);
-    
     if (pool && pool.otp === code) {
-      const updatedPools = pools.map(p => 
-        p.id === poolId ? { ...p, otpVerified: true, status: 'verified' as const } : p
-      );
-      
-      set({ pools: updatedPools });
-      
-      const allVerified = updatedPools.every(p => p.otpVerified);
-      if (allVerified) {
-        set({ demoStep: 'verified' });
-      }
-      
+      const updated = pools.map(p => p.id === poolId ? { ...p, otpVerified: true, status: 'verified' as const } : p);
+      set({ pools: updated });
+      if (updated.every(p => p.otpVerified)) set({ demoStep: 'verified' });
       return true;
     }
-    
     return false;
   },
 
   startTrips: () => {
     const { trips, pools, drivers, students } = get();
-    
-    const updatedTrips = trips.map(t => ({
-      ...t,
-      status: 'started' as const,
-      currentPosition: t.route[0],
-    }));
-
-    const updatedPools = pools.map(p => ({
-      ...p,
-      status: 'started' as const,
-    }));
-
-    const updatedDrivers = drivers.map(d => ({
-      ...d,
-      status: 'enroute' as const,
-    }));
-
-    const updatedStudents = students.map(s => ({
-      ...s,
-      status: 'enroute' as const,
-    }));
-
-    set({ 
-      trips: updatedTrips, 
-      pools: updatedPools,
-      drivers: updatedDrivers,
-      students: updatedStudents,
-      demoStep: 'moving' 
+    set({
+      trips: trips.map(t => ({ ...t, status: 'started' as const, currentPosition: t.route[0] })),
+      pools: pools.map(p => ({ ...p, status: 'started' as const })),
+      drivers: drivers.map(d => ({ ...d, status: 'enroute' as const })),
+      students: students.map(s => ({ ...s, status: 'enroute' as const })),
+      demoStep: 'moving',
     });
   },
 
   updateTripProgress: (tripId, progress, position) => {
     const { trips } = get();
-    
-    const updatedTrips = trips.map(t =>
-      t.id === tripId ? { ...t, progress, currentPosition: position } : t
-    );
-
-    set({ trips: updatedTrips });
+    set({ trips: trips.map(t => t.id === tripId ? { ...t, progress, currentPosition: position } : t) });
   },
 
   completeTrips: () => {
     const { trips, pools, drivers, students } = get();
-    
-    const updatedTrips = trips.map(t => ({
-      ...t,
-      status: 'completed' as const,
-      progress: 1,
-    }));
+    set({
+      trips: trips.map(t => ({ ...t, status: 'completed' as const, progress: 1 })),
+      pools: pools.map(p => ({ ...p, status: 'completed' as const })),
+      drivers: drivers.map(d => ({ ...d, status: 'idle' as const, assignedPoolId: undefined })),
+      students: students.map(s => ({ ...s, status: 'completed' as const })),
+      demoStep: 'completed',
+    });
+  },
 
-    const updatedPools = pools.map(p => ({
-      ...p,
-      status: 'completed' as const,
-    }));
+  // ------------------ NEW: STUDENT-ONLY MINI DEMO ------------------
+  initStudentOnlyDemo: () => {
+    const students: Student[] = [
+      { id: 's1', name: 'Ishaan Sharma',   roll: '102303795', hostel: 'AMRITAM', pickup: 'amritam-hall', drop: 'c-block',   status: 'assigned', color: '#14F4C5' },
+      { id: 's2', name: 'Abhishek Kansal', roll: '102309901', hostel: 'AMRITAM', pickup: 'amritam-hall', drop: 'c-block',   status: 'assigned', color: '#22c55e' },
+      { id: 's3', name: 'Sunita Jogpal',   roll: '102307777', hostel: 'PG',      pickup: 'pg-hostel',   drop: 'c-block',   status: 'assigned', color: '#f43f5e' },
+      { id: 's4', name: 'Mehak Arora',     roll: '102303801', hostel: 'PG',      pickup: 'pg-hostel',   drop: 'c-block',   status: 'assigned', color: '#a78bfa' },
+    ];
 
-    const updatedDrivers = drivers.map(d => ({
-      ...d,
-      status: 'idle' as const,
-      assignedPoolId: undefined,
-    }));
+    const drivers: Driver[] = [
+      { id: 'd1', name: 'Raj Kumar', plate: 'PB11-ER-4101', lat: 30.3538, lng: 76.3635, status: 'assigned', assignedPoolId: 'pool-1' },
+    ];
 
-    const updatedStudents = students.map(s => ({
-      ...s,
-      status: 'completed' as const,
-    }));
+    const pools: Pool[] = [{
+      id: 'pool-1',
+      studentIds: ['s1','s2','s3','s4'],
+      pickup: 'amritam-hall',
+      drop: 'c-block',
+      otp: '823614',
+      otpVerified: false,
+      status: 'assigned',
+      driverId: 'd1',
+    }];
 
-    set({ 
-      trips: updatedTrips, 
-      pools: updatedPools,
-      drivers: updatedDrivers,
-      students: updatedStudents,
-      demoStep: 'completed' 
+    const trips: Trip[] = [{
+      id: 'trip-pool-1',
+      poolId: 'pool-1',
+      driverId: 'd1',
+      route: [
+        [30.3538, 76.3635],
+        [30.3542, 76.3638],
+        [30.3545, 76.3640], // Amritam (boys)
+        [30.3552, 76.3653],
+        [30.3559, 76.3672],
+        [30.3568, 76.3695],
+        [30.3553, 76.3719], // PG Hostel (girls)
+        [30.3557, 76.3700],
+        [30.3556, 76.3685],
+        [30.3555, 76.3665], // C Block
+      ],
+      progress: 0,
+      status: 'pending',
+    }];
+
+    set({
+      students,
+      drivers,
+      pools,
+      trips,
+      demoStep: 'assigned',
     });
   },
 
   resetDemo: () => {
-    set({
-      students: [],
-      drivers: [],
-      pools: [],
-      trips: [],
-      demoStep: 'idle',
-    });
+    set({ students: [], drivers: [], pools: [], trips: [], demoStep: 'idle' });
   },
 }));
