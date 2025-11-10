@@ -1,5 +1,6 @@
 // src/store/useAppStore.ts
 import { create } from 'zustand';
+export const SEEDED_STUDENT_COLOR = '#14F4C5';
 
 export interface Hotspot {
   id: string;
