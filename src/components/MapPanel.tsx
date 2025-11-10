@@ -114,9 +114,13 @@ export default function MapPanel({ height = '600px', showControls = true }: MapP
 
       const icon = L.divIcon({
         className: 'student-marker',
-        html: `<div class="w-6 h-6 ${statusColors[student.status]} rounded-full border-2 shadow-lg pulse-ring" style="border-color: ${colors.stroke}; box-shadow: 0 0 0 3px ${colors.shadow};"></div>`,
-        iconSize: [24, 24],
-        iconAnchor: [12, 12],
+        html: `<div class="flex flex-col items-center">
+          <div class="w-8 h-8 ${statusColors[student.status]} rounded-full border-3 shadow-xl pulse-ring flex items-center justify-center text-white font-bold text-xs" style="border-color: ${colors.stroke}; box-shadow: 0 0 0 4px ${colors.shadow};">
+            ${student.id.replace('s', '')}
+          </div>
+        </div>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
       });
 
       const marker = L.marker([hotspot.lat, hotspot.lng], { icon })
@@ -180,22 +184,29 @@ export default function MapPanel({ height = '600px', showControls = true }: MapP
         }).addTo(mapInstance.current!);
         polylinesRef.current.set(`route-${trip.id}`, polyline);
 
-        // Stops: pickup (start), mid-pickup for pool-2, and drop (end)
+        // Stops: specific pickup markers and final drop
         const stops: L.Layer[] = [];
-        const start = trip.route[0] as [number, number];
         const end = trip.route[trip.route.length - 1] as [number, number];
-        stops.push(
-          L.circleMarker(start, { radius: 5, color: colors.stroke, weight: 2, fillColor: colors.stroke, fillOpacity: 0.9 })
-            .bindTooltip('Pickup', { permanent: false })
-            .addTo(mapInstance.current!)
-        );
 
-        // Mid pickup at Hostel B for pool-2
+        // Mid pickup waypoints for pool-2
         if (trip.poolId === 'pool-2') {
-          const mid = [30.3548, 76.3645] as [number, number];
+          const amritamPickup = [30.3545, 76.3640] as [number, number];
+          const vyomPickup = [30.3560, 76.3650] as [number, number];
           stops.push(
-            L.circleMarker(mid, { radius: 5, color: colors.stroke, weight: 2, fillColor: colors.stroke, fillOpacity: 0.9 })
-              .bindTooltip('Pickup (Hostel B)', { permanent: false })
+            L.circleMarker(amritamPickup, { radius: 6, color: colors.stroke, weight: 2, fillColor: colors.stroke, fillOpacity: 0.9 })
+              .bindTooltip('Pickup (AMRITAM HALL - 3 students)', { permanent: false })
+              .addTo(mapInstance.current!)
+          );
+          stops.push(
+            L.circleMarker(vyomPickup, { radius: 6, color: colors.stroke, weight: 2, fillColor: colors.stroke, fillOpacity: 0.9 })
+              .bindTooltip('Pickup (VYOM HALL - 1 student)', { permanent: false })
+              .addTo(mapInstance.current!)
+          );
+        } else if (trip.poolId === 'pool-1') {
+          const amritamPickup = [30.3545, 76.3640] as [number, number];
+          stops.push(
+            L.circleMarker(amritamPickup, { radius: 6, color: colors.stroke, weight: 2, fillColor: colors.stroke, fillOpacity: 0.9 })
+              .bindTooltip('Pickup (AMRITAM HALL - 4 students)', { permanent: false })
               .addTo(mapInstance.current!)
           );
         }

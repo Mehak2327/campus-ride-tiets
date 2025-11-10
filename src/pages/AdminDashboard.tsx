@@ -36,8 +36,8 @@ export default function AdminDashboard() {
   useEffect(() => {
     // Animate trips with multi-segment routing and faster speed
     if (demoStep === 'moving' && trips.some((t) => t.status === 'started')) {
-      const speedPerTick = 0.03; // progress delta per tick (faster)
-      const tickMs = 150; // smoother & quicker updates
+      const speedPerTick = 0.012; // progress delta per tick (slower, smoother movement)
+      const tickMs = 200; // Update every 200ms for visible movement
 
       const getPositionAlongRoute = (route: [number, number][], progress: number): [number, number] => {
         if (!route || route.length === 0) return [30.3558, 76.3651];
