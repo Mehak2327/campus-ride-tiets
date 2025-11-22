@@ -18,8 +18,7 @@ function App() {
           </Routes>
         </div>
 
-        {/* Footer ONLY ONCE */}
-        <Footer />
+       
       </div>
     </Router>
   );

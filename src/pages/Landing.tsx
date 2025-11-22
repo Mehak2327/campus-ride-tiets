@@ -1,115 +1,72 @@
-import { Link } from "react-router-dom";
+import React from "react";
 import ThaparNavbar from "@/components/ThaparNavbar";
+import HeroThapar from "@/components/HeroThapar";
+import MapPanel from "@/components/MapPanel";
 import Footer from "@/components/Footer";
+
+function FeatureCard({ title, desc }: { title: string; desc: string }) {
+  return (
+    <div className="bg-white rounded-2xl p-6 shadow-sm border hover:shadow-md transition">
+      <div className="flex items-start gap-4">
+        <div className="h-12 w-12 rounded-xl bg-[#AA0000]/10 flex items-center justify-center text-[#AA0000] font-bold text-xl">
+          R
+        </div>
+        <div>
+          <div className="font-semibold text-gray-900 text-lg">{title}</div>
+          <div className="text-sm text-gray-600 mt-1 leading-relaxed">{desc}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-[#E8DDDF] flex flex-col">
-      {/* Navbar */}
+    <div className="w-full min-h-screen bg-white flex flex-col">
+
+      {/* NAVBAR */}
       <ThaparNavbar />
 
       {/* HERO SECTION */}
-      <section
-        className="relative w-full h-[85vh] flex items-center"
-        style={{
-          backgroundImage: "url('/thapar.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Transparent overlay */}
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+      <HeroThapar />
 
-        {/* HERO TEXT */}
-        <div className="relative z-10 max-w-3xl ml-10 text-left text-white">
-          <h1 className="text-5xl font-extrabold leading-tight">
-            Thapar Campus Mobility Service
-          </h1>
-
-          <p className="text-lg mt-4 max-w-xl">
-            A secure, efficient and eco-friendly transportation service inside
-            Thapar University. Real-time tracking, student verification & intelligent pooling.
-          </p>
-
-          <div className="flex gap-4 mt-8">
-            <Link to="/demo">
-              <button className="bg-[#a00000] hover:bg-[#7c0000] text-white px-8 py-3 rounded-full font-medium">
-                Demo
-              </button>
-            </Link>
-
-            <Link to="/auth/student">
-              <button className="bg-white text-black px-8 py-3 rounded-full font-medium border border-gray-300 hover:bg-gray-100">
-                Student Login
-              </button>
-            </Link>
-
-            <Link to="/auth/driver">
-              <button className="bg-white text-black px-8 py-3 rounded-full font-medium border border-gray-300 hover:bg-gray-100">
-                Driver Login
-              </button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================
-          RESTORED — WHY CAMPUS RIDE 
-      =============================*/}
-      <section className="py-20 bg-[#FAF7F7] text-center">
-        <h2 className="text-4xl font-bold mb-4">Why Campus Ride?</h2>
-        <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
+      {/* WHY CAMPUS RIDE SECTION */}
+      <section className="w-full py-20 bg-white">
+        <h2 className="text-center font-bold text-3xl text-gray-900">
+          Why Campus Ride?
+        </h2>
+        <p className="text-center text-gray-600 mt-3 max-w-3xl mx-auto">
           Smart pooling built for Thapar students — save time, reduce congestion,
           and track rides easily.
         </p>
 
-        {/* Feature Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
-          
-          {/* Card 1 */}
-          <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-start border">
-            <div className="bg-red-100 text-red-600 rounded-md px-3 py-1 font-bold mb-4">R</div>
-            <h3 className="font-semibold text-lg">Quick Pickup</h3>
-            <p className="text-gray-600 mt-2">
-              Fast match algorithm for minimal wait times.
-            </p>
-          </div>
-
-          {/* Card 2 */}
-          <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-start border">
-            <div className="bg-red-100 text-red-600 rounded-md px-3 py-1 font-bold mb-4">R</div>
-            <h3 className="font-semibold text-lg">Real-time Tracking</h3>
-            <p className="text-gray-600 mt-2">
-              Live driver location and estimated arrival.
-            </p>
-          </div>
-
-          {/* Card 3 */}
-          <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-start border">
-            <div className="bg-red-100 text-red-600 rounded-md px-3 py-1 font-bold mb-4">R</div>
-            <h3 className="font-semibold text-lg">Safe & Verified</h3>
-            <p className="text-gray-600 mt-2">
-              OTP verification for every ride.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================
-          RESTORED — MAP SECTION 
-      =============================*/}
-      <section className="pb-20 bg-[#FAF7F7] text-center">
-        <h2 className="text-3xl font-bold mt-10 mb-6">Live demo map preview</h2>
-        <div className="flex justify-center">
-          <img
-            src="/map-placeholder.png"
-            alt="Map Preview"
-            className="max-w-5xl rounded-xl shadow-lg"
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 mt-12 max-w-6xl mx-auto">
+          <FeatureCard
+            title="Quick Pickup"
+            desc="Fast match algorithm for minimal wait times."
+          />
+          <FeatureCard
+            title="Real-time Tracking"
+            desc="Live driver location and estimated arrival."
+          />
+          <FeatureCard
+            title="Safe & Verified"
+            desc="OTP verification for every ride."
           />
         </div>
       </section>
 
-      {/* Footer */}
+      {/* MAP PREVIEW SECTION */}
+      <section className="w-full py-20 bg-white">
+        <h2 className="text-center font-bold text-3xl text-gray-900">
+          Live demo map preview
+        </h2>
+        <div className="mt-10 max-w-6xl mx-auto rounded-2xl overflow-hidden shadow">
+          <MapPanel />
+        </div>
+      </section>
+
+      {/* FOOTER (ONLY ONCE NOW) */}
       <Footer />
     </div>
   );
