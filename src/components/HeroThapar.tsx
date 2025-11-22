@@ -1,57 +1,68 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
 export default function HeroThapar() {
-  const navigate = useNavigate();
-
   return (
-    <section className="relative w-full h-[92vh] overflow-hidden">
+    <header className="relative h-[85vh] flex items-center justify-start">
 
       {/* Background Image */}
-      <img
-        src="/thapar.jpg"
-        alt="Thapar University"
-        className="absolute inset-0 w-full h-full object-cover object-center"
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/thapar.jpg')" }}
       />
 
-      {/* White Transparent Overlay */}
-      <div className="absolute inset-0 bg-white/40 backdrop-blur-sm"></div>
+      {/* Very Soft Dark Overlay (for readability) */}
+      <div className="absolute inset-0 bg-black/20" />
 
-      {/* Text Content */}
-      <div className="relative z-10 max-w-4xl px-6 pt-32">
-        <h1 className="text-5xl font-extrabold text-gray-900 leading-tight">
-          Thapar Campus Mobility<br />Service
+      {/* LEFT ALIGNED CONTENT */}
+      <div className="relative z-10 max-w-3xl px-16 text-left">
+        <h1 className="text-5xl font-extrabold text-white leading-tight drop-shadow">
+          Thapar Campus Mobility Service
         </h1>
 
-        <p className="mt-4 text-lg text-gray-800 max-w-2xl">
-          A secure, efficient and eco-friendly transportation service inside
-          Thapar University. Real-time tracking, student verification & intelligent pooling.
+        <p className="mt-5 text-lg text-white/90 leading-relaxed max-w-xl drop-shadow">
+          A secure, efficient and eco-friendly transportation service inside Thapar University.
+          Real-time tracking, student verification & intelligent pooling.
         </p>
 
-        {/* Buttons */}
-        <div className="mt-8 flex flex-wrap gap-4">
-          <button
-            onClick={() => navigate("/admin")}
-            className="px-8 py-3 rounded-full bg-red-700 text-white text-lg shadow-lg"
+        <div className="mt-8 flex justify-start gap-4">
+          <a
+            href="/auth/admin"
+            className="px-7 py-3 bg-[#AA0000] rounded-full text-white text-lg font-semibold shadow-lg hover:bg-[#8a0000] transition"
           >
             Demo
-          </button>
+          </a>
 
-          <button
-            onClick={() => navigate("/student")}
-            className="px-8 py-3 rounded-full border border-gray-500 text-gray-900 text-lg bg-white/50 backdrop-blur"
+          <a
+            href="/auth/student"
+            className="px-7 py-3 rounded-full border border-white/70 text-white text-lg font-semibold backdrop-blur-sm hover:bg-white/20 transition"
           >
             Student Login
-          </button>
+          </a>
 
-          <button
-            onClick={() => navigate("/driver")}
-            className="px-8 py-3 rounded-full border border-gray-500 text-gray-900 text-lg bg-white/50 backdrop-blur"
+          <a
+            href="/auth/driver"
+            className="px-7 py-3 rounded-full border border-white/70 text-white text-lg font-semibold backdrop-blur-sm hover:bg-white/20 transition"
           >
             Driver Login
-          </button>
+          </a>
         </div>
       </div>
-    </section>
+
+      {/* Info Card */}
+      <div className="absolute bottom-12 right-12 bg-white rounded-2xl shadow-xl border p-5 w-64 z-20">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-xl bg-[#AA0000]/10 flex items-center justify-center text-[#AA0000] font-bold">
+            TI
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900">Next Pickup</p>
+            <p className="text-sm text-gray-600">Gate 3 · 2 min away</p>
+          </div>
+        </div>
+        <p className="mt-3 text-sm text-gray-700 leading-relaxed">
+          Pool with up to 4 students · Live GPS · OTP verification
+        </p>
+      </div>
+    </header>
   );
 }
