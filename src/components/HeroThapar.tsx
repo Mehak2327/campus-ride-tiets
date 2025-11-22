@@ -1,51 +1,55 @@
 import React from "react";
-import thaparImage from "/thapar.jpg";
+import { useNavigate } from "react-router-dom";
 
 export default function HeroThapar() {
-  return (
-    <section
-      className="relative w-full h-[92vh] flex items-center"
-      style={{
-        backgroundImage: `url(${thaparImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      {/* ✨ White transparent overlay restored */}
-      <div className="absolute inset-0 bg-white/55 backdrop-blur-[2px]"></div>
+  const navigate = useNavigate();
 
-      {/* Content */}
-      <div className="relative z-10 max-w-3xl px-6 sm:px-12 md:px-20">
-        <h1 className="text-4xl md:text-6xl font-bold text-[#111827]">
-          Thapar Campus Mobility <br /> Service
+  return (
+    <section className="relative w-full h-[92vh] overflow-hidden">
+
+      {/* Background Image */}
+      <img
+        src="/thapar.jpg"
+        alt="Thapar University"
+        className="absolute inset-0 w-full h-full object-cover object-center"
+      />
+
+      {/* White Transparent Overlay */}
+      <div className="absolute inset-0 bg-white/40 backdrop-blur-sm"></div>
+
+      {/* Text Content */}
+      <div className="relative z-10 max-w-4xl px-6 pt-32">
+        <h1 className="text-5xl font-extrabold text-gray-900 leading-tight">
+          Thapar Campus Mobility<br />Service
         </h1>
 
-        <p className="mt-6 text-lg md:text-xl text-gray-700">
+        <p className="mt-4 text-lg text-gray-800 max-w-2xl">
           A secure, efficient and eco-friendly transportation service inside
           Thapar University. Real-time tracking, student verification & intelligent pooling.
         </p>
 
-        <div className="mt-8 flex gap-4">
-          <a
-            href="/admin-auth"
-            className="px-6 py-3 bg-[#8A0000] text-white rounded-full text-lg shadow-md hover:bg-[#700000] transition"
+        {/* Buttons */}
+        <div className="mt-8 flex flex-wrap gap-4">
+          <button
+            onClick={() => navigate("/admin")}
+            className="px-8 py-3 rounded-full bg-red-700 text-white text-lg shadow-lg"
           >
             Demo
-          </a>
+          </button>
 
-          <a
-            href="/student-auth"
-            className="px-6 py-3 border border-gray-600 text-gray-800 rounded-full text-lg backdrop-blur-sm bg-white/40"
+          <button
+            onClick={() => navigate("/student")}
+            className="px-8 py-3 rounded-full border border-gray-500 text-gray-900 text-lg bg-white/50 backdrop-blur"
           >
             Student Login
-          </a>
+          </button>
 
-          <a
-            href="/driver-auth"
-            className="px-6 py-3 border border-gray-600 text-gray-800 rounded-full text-lg backdrop-blur-sm bg-white/40"
+          <button
+            onClick={() => navigate("/driver")}
+            className="px-8 py-3 rounded-full border border-gray-500 text-gray-900 text-lg bg-white/50 backdrop-blur"
           >
             Driver Login
-          </a>
+          </button>
         </div>
       </div>
     </section>

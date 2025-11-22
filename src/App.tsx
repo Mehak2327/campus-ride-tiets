@@ -1,49 +1,27 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import StudentAuth from "./pages/auth/StudentAuth";
 import DriverAuth from "./pages/auth/DriverAuth";
 import AdminAuth from "./pages/auth/AdminAuth";
-
-import StudentDashboard from "./pages/StudentDashboard";
-import DriverDashboard from "./pages/DriverDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
-
-import NotFound from "./pages/NotFound";
-import Footer from "@/components/Footer";
-
-const queryClient = new QueryClient();
+import Footer from "./components/Footer";
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+    <Router>
+      <div className="flex flex-col min-h-screen">
+        <div className="flex-grow">
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/auth/student" element={<StudentAuth />} />
-            <Route path="/auth/driver" element={<DriverAuth />} />
-            <Route path="/auth/admin" element={<AdminAuth />} />
-
-            <Route path="/student" element={<StudentDashboard />} />
-            <Route path="/driver" element={<DriverDashboard />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-
-            {/* must be last */}
-            <Route path="*" element={<NotFound />} />
+            <Route path="/student" element={<StudentAuth />} />
+            <Route path="/driver" element={<DriverAuth />} />
+            <Route path="/admin" element={<AdminAuth />} />
           </Routes>
-        </BrowserRouter>
+        </div>
 
-        {/* footer always at bottom */}
+        {/* Footer ONLY ONCE */}
         <Footer />
-      </TooltipProvider>
-    </QueryClientProvider>
+      </div>
+    </Router>
   );
 }
 
