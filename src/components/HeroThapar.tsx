@@ -1,65 +1,53 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function HeroThapar() {
   return (
-    <header className="relative h-[85vh] flex items-center justify-start bg-white">
-
-      {/* Background Image WITHOUT any white overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/thapar.jpg')" }}
+    <section className="relative w-full h-[88vh] overflow-hidden bg-[#E5DADA]">
+      {/* Clear Background Image (NO overlay now) */}
+      <img
+        src="/thapar.jpg"
+        alt="Thapar Campus"
+        className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* LEFT ALIGNED CONTENT */}
-      <div className="relative z-10 max-w-3xl px-16 text-left">
-        <h1 className="text-5xl font-extrabold text-gray-900 leading-tight">
-          Thapar Campus Mobility Service
-        </h1>
+      {/* Content */}
+      <div className="relative z-10 flex items-center h-full px-12">
+        <div className="max-w-3xl text-left">
+          <h1 className="text-5xl font-extrabold text-[#1A1A1A] leading-tight drop-shadow-lg">
+            Thapar Campus Mobility Service
+          </h1>
 
-        <p className="mt-5 text-lg text-gray-700 leading-relaxed max-w-xl">
-          A secure, efficient and eco-friendly transportation service inside Thapar University.
-          Real-time tracking, student verification & intelligent pooling.
-        </p>
+          <p className="mt-6 text-lg text-gray-900 font-medium leading-relaxed drop-shadow">
+            A secure, efficient and eco-friendly transportation service inside
+            Thapar University. Real-time tracking, student verification & intelligent pooling.
+          </p>
 
-        <div className="mt-8 flex justify-start gap-4">
-          <a
-            href="/auth/admin"
-            className="px-7 py-3 bg-[#AA0000] rounded-full text-white text-lg font-semibold shadow hover:bg-[#8a0000] transition"
-          >
-            Demo
-          </a>
+          {/* Buttons */}
+          <div className="flex gap-4 mt-10">
+            <Link
+              to="/admin"
+              className="px-10 py-3 rounded-full bg-[#AA0000] text-white font-semibold shadow-lg hover:bg-[#8c0000] transition"
+            >
+              Demo
+            </Link>
 
-          <a
-            href="/auth/student"
-            className="px-7 py-3 rounded-full border border-gray-400 text-gray-700 text-lg font-semibold hover:bg-gray-100 transition"
-          >
-            Student Login
-          </a>
+            <Link
+              to="/auth/student"
+              className="px-10 py-3 rounded-full border border-gray-400 text-gray-800 font-semibold bg-white/40 backdrop-blur-sm hover:bg-white transition"
+            >
+              Student Login
+            </Link>
 
-          <a
-            href="/auth/driver"
-            className="px-7 py-3 rounded-full border border-gray-400 text-gray-700 text-lg font-semibold hover:bg-gray-100 transition"
-          >
-            Driver Login
-          </a>
-        </div>
-      </div>
-
-      {/* Info Card */}
-      <div className="absolute bottom-12 right-12 bg-white rounded-2xl shadow-xl border p-5 w-64">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-[#AA0000]/10 flex items-center justify-center text-[#AA0000] font-bold">
-            TI
-          </div>
-          <div>
-            <p className="font-semibold text-gray-900">Next Pickup</p>
-            <p className="text-sm text-gray-600">Gate 3 · 2 min away</p>
+            <Link
+              to="/auth/driver"
+              className="px-10 py-3 rounded-full border border-gray-400 text-gray-800 font-semibold bg-white/40 backdrop-blur-sm hover:bg-white transition"
+            >
+              Driver Login
+            </Link>
           </div>
         </div>
-        <p className="mt-3 text-sm text-gray-700 leading-relaxed">
-          Pool with up to 4 students · Live GPS · OTP verification
-        </p>
       </div>
-    </header>
+    </section>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import ThaparNavbar from "@/components/ThaparNavbar";
 import HeroThapar from "@/components/HeroThapar";
-import MapPanel from "@/components/MapPanel";
+import Footer from "@/components/Footer";
 
 function FeatureCard({ title, desc }: { title: string; desc: string }) {
   return (
@@ -21,57 +21,13 @@ function FeatureCard({ title, desc }: { title: string; desc: string }) {
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-[#F7F7F7]">
+    <div className="min-h-screen flex flex-col bg-[#E5DADA]">
       <ThaparNavbar />
+      <HeroThapar />
 
-      <main className="pt-16">
-        <HeroThapar />
+      {/* No extra footer here — removed white footer */}
 
-        {/* Why section */}
-        <section className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-16">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900">Why Campus Ride?</h2>
-            <p className="text-gray-600 mt-3 max-w-2xl mx-auto text-lg">
-              Smart pooling built for Thapar students — save time, reduce congestion, and track rides easily.
-            </p>
-          </div>
-
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            <FeatureCard
-              title="Quick Pickup"
-              desc="Fast match algorithm for minimal wait times."
-            />
-            <FeatureCard
-              title="Real-time Tracking"
-              desc="Live driver location and estimated arrival."
-            />
-            <FeatureCard
-              title="Safe & Verified"
-              desc="OTP verification for every ride."
-            />
-          </div>
-        </section>
-
-        {/* Map Section */}
-        <section className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 pb-20">
-          <h3 className="text-2xl font-semibold text-gray-900 mb-6">Live demo map preview</h3>
-
-          <div className="rounded-3xl overflow-hidden shadow-md border bg-white">
-            <MapPanel height="350px" showControls={false} />
-          </div>
-        </section>
-
-        <footer className="border-t bg-white">
-          <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-6 flex items-center justify-between">
-            <div className="text-sm text-gray-600">
-              © {new Date().getFullYear()} Campus Ride — Thapar University
-            </div>
-            <div className="text-sm text-gray-500">
-              Designed with ❤️ for Thapar Campus
-            </div>
-          </div>
-        </footer>
-      </main>
+      <Footer />
     </div>
   );
 }
