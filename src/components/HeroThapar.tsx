@@ -1,51 +1,51 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import thaparImage from "/thapar.jpg";
 
 export default function HeroThapar() {
   return (
-    <section className="relative w-full h-[88vh] overflow-hidden bg-[#E5DADA]">
-      {/* Clear Background Image (NO overlay now) */}
-      <img
-        src="/thapar.jpg"
-        alt="Thapar Campus"
-        className="absolute inset-0 w-full h-full object-cover"
-      />
+    <section
+      className="relative w-full h-[92vh] flex items-center"
+      style={{
+        backgroundImage: `url(${thaparImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* ✨ White transparent overlay restored */}
+      <div className="absolute inset-0 bg-white/55 backdrop-blur-[2px]"></div>
 
       {/* Content */}
-      <div className="relative z-10 flex items-center h-full px-12">
-        <div className="max-w-3xl text-left">
-          <h1 className="text-5xl font-extrabold text-[#1A1A1A] leading-tight drop-shadow-lg">
-            Thapar Campus Mobility Service
-          </h1>
+      <div className="relative z-10 max-w-3xl px-6 sm:px-12 md:px-20">
+        <h1 className="text-4xl md:text-6xl font-bold text-[#111827]">
+          Thapar Campus Mobility <br /> Service
+        </h1>
 
-          <p className="mt-6 text-lg text-gray-900 font-medium leading-relaxed drop-shadow">
-            A secure, efficient and eco-friendly transportation service inside
-            Thapar University. Real-time tracking, student verification & intelligent pooling.
-          </p>
+        <p className="mt-6 text-lg md:text-xl text-gray-700">
+          A secure, efficient and eco-friendly transportation service inside
+          Thapar University. Real-time tracking, student verification & intelligent pooling.
+        </p>
 
-          {/* Buttons */}
-          <div className="flex gap-4 mt-10">
-            <Link
-              to="/admin"
-              className="px-10 py-3 rounded-full bg-[#AA0000] text-white font-semibold shadow-lg hover:bg-[#8c0000] transition"
-            >
-              Demo
-            </Link>
+        <div className="mt-8 flex gap-4">
+          <a
+            href="/admin-auth"
+            className="px-6 py-3 bg-[#8A0000] text-white rounded-full text-lg shadow-md hover:bg-[#700000] transition"
+          >
+            Demo
+          </a>
 
-            <Link
-              to="/auth/student"
-              className="px-10 py-3 rounded-full border border-gray-400 text-gray-800 font-semibold bg-white/40 backdrop-blur-sm hover:bg-white transition"
-            >
-              Student Login
-            </Link>
+          <a
+            href="/student-auth"
+            className="px-6 py-3 border border-gray-600 text-gray-800 rounded-full text-lg backdrop-blur-sm bg-white/40"
+          >
+            Student Login
+          </a>
 
-            <Link
-              to="/auth/driver"
-              className="px-10 py-3 rounded-full border border-gray-400 text-gray-800 font-semibold bg-white/40 backdrop-blur-sm hover:bg-white transition"
-            >
-              Driver Login
-            </Link>
-          </div>
+          <a
+            href="/driver-auth"
+            className="px-6 py-3 border border-gray-600 text-gray-800 rounded-full text-lg backdrop-blur-sm bg-white/40"
+          >
+            Driver Login
+          </a>
         </div>
       </div>
     </section>
