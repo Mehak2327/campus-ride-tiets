@@ -1,101 +1,115 @@
-import Footer from "@/components/Footer";
+import { Link } from "react-router-dom";
 import ThaparNavbar from "@/components/ThaparNavbar";
+import Footer from "@/components/Footer";
 
 export default function Landing() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#E8DEDF]">
+    <div className="min-h-screen bg-[#E8DDDF] flex flex-col">
+      {/* Navbar */}
       <ThaparNavbar />
 
       {/* HERO SECTION */}
-      <section className="relative h-[80vh] w-full overflow-hidden">
-        <img
-          src="/thapar.jpg"
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
-          alt="Thapar University"
-        />
-        <div className="relative z-10 max-w-6xl mx-auto px-6 py-32">
-          <h1 className="text-5xl font-bold text-[#111827] leading-tight max-w-3xl">
+      <section
+        className="relative w-full h-[85vh] flex items-center"
+        style={{
+          backgroundImage: "url('/thapar.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {/* Transparent overlay */}
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+
+        {/* HERO TEXT */}
+        <div className="relative z-10 max-w-3xl ml-10 text-left text-white">
+          <h1 className="text-5xl font-extrabold leading-tight">
             Thapar Campus Mobility Service
           </h1>
 
-          <p className="mt-6 text-lg text-black/70 max-w-2xl">
+          <p className="text-lg mt-4 max-w-xl">
             A secure, efficient and eco-friendly transportation service inside
-            Thapar University. Real-time tracking, student verification &
-            intelligent pooling.
+            Thapar University. Real-time tracking, student verification & intelligent pooling.
           </p>
 
           <div className="flex gap-4 mt-8">
-            <a
-              href="/auth/StudentAuth"
-              className="px-8 py-3 rounded-full bg-[#B30000] text-white font-semibold shadow-md"
-            >
-              Demo
-            </a>
+            <Link to="/demo">
+              <button className="bg-[#a00000] hover:bg-[#7c0000] text-white px-8 py-3 rounded-full font-medium">
+                Demo
+              </button>
+            </Link>
 
-            <a
-              href="/auth/StudentAuth"
-              className="px-8 py-3 rounded-full border border-black/20 bg-white font-medium text-black"
-            >
-              Student Login
-            </a>
+            <Link to="/auth/student">
+              <button className="bg-white text-black px-8 py-3 rounded-full font-medium border border-gray-300 hover:bg-gray-100">
+                Student Login
+              </button>
+            </Link>
 
-            <a
-              href="/auth/DriverAuth"
-              className="px-8 py-3 rounded-full border border-black/20 bg-white font-medium text-black"
-            >
-              Driver Login
-            </a>
+            <Link to="/auth/driver">
+              <button className="bg-white text-black px-8 py-3 rounded-full font-medium border border-gray-300 hover:bg-gray-100">
+                Driver Login
+              </button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* WHY CAMPUS RIDE SECTION — RESTORED */}
-      <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-[#111827]">Why Campus Ride?</h2>
-          <p className="mt-4 text-lg text-black/70 max-w-3xl mx-auto">
-            Smart pooling built for Thapar students — save time, reduce congestion,
-            and track rides easily.
-          </p>
+      {/* ============================
+          RESTORED — WHY CAMPUS RIDE 
+      =============================*/}
+      <section className="py-20 bg-[#FAF7F7] text-center">
+        <h2 className="text-4xl font-bold mb-4">Why Campus Ride?</h2>
+        <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
+          Smart pooling built for Thapar students — save time, reduce congestion,
+          and track rides easily.
+        </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-            {/* Quick Pickup */}
-            <div className="p-8 rounded-2xl shadow-md bg-white">
-              <div className="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center font-bold text-xl mb-4">
-                R
-              </div>
-              <h3 className="font-semibold text-xl">Quick Pickup</h3>
-              <p className="text-black/70 mt-2">
-                Fast match algorithm for minimal wait times.
-              </p>
-            </div>
+        {/* Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
+          
+          {/* Card 1 */}
+          <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-start border">
+            <div className="bg-red-100 text-red-600 rounded-md px-3 py-1 font-bold mb-4">R</div>
+            <h3 className="font-semibold text-lg">Quick Pickup</h3>
+            <p className="text-gray-600 mt-2">
+              Fast match algorithm for minimal wait times.
+            </p>
+          </div>
 
-            {/* Real-time Tracking */}
-            <div className="p-8 rounded-2xl shadow-md bg-white">
-              <div className="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center font-bold text-xl mb-4">
-                R
-              </div>
-              <h3 className="font-semibold text-xl">Real-time Tracking</h3>
-              <p className="text-black/70 mt-2">
-                Live driver location and estimated arrival.
-              </p>
-            </div>
+          {/* Card 2 */}
+          <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-start border">
+            <div className="bg-red-100 text-red-600 rounded-md px-3 py-1 font-bold mb-4">R</div>
+            <h3 className="font-semibold text-lg">Real-time Tracking</h3>
+            <p className="text-gray-600 mt-2">
+              Live driver location and estimated arrival.
+            </p>
+          </div>
 
-            {/* Safe & Verified */}
-            <div className="p-8 rounded-2xl shadow-md bg-white">
-              <div className="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center font-bold text-xl mb-4">
-                R
-              </div>
-              <h3 className="font-semibold text-xl">Safe & Verified</h3>
-              <p className="text-black/70 mt-2">
-                OTP verification for every ride.
-              </p>
-            </div>
+          {/* Card 3 */}
+          <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-start border">
+            <div className="bg-red-100 text-red-600 rounded-md px-3 py-1 font-bold mb-4">R</div>
+            <h3 className="font-semibold text-lg">Safe & Verified</h3>
+            <p className="text-gray-600 mt-2">
+              OTP verification for every ride.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* FOOTER – FIXED */}
+      {/* ============================
+          RESTORED — MAP SECTION 
+      =============================*/}
+      <section className="pb-20 bg-[#FAF7F7] text-center">
+        <h2 className="text-3xl font-bold mt-10 mb-6">Live demo map preview</h2>
+        <div className="flex justify-center">
+          <img
+            src="/map-placeholder.png"
+            alt="Map Preview"
+            className="max-w-5xl rounded-xl shadow-lg"
+          />
+        </div>
+      </section>
+
+      {/* Footer */}
       <Footer />
     </div>
   );
