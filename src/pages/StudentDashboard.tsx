@@ -87,7 +87,8 @@ export default function StudentDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F2EDEE] p-4 md:p-8">
+    <div className="min-h-screen bg-[#e8d8d9] p-8 rounded-3xl shadow-2xl">
+
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
