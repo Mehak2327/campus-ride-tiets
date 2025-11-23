@@ -206,11 +206,22 @@ export default function MapPanel({
     });
 
   }, [hotspots, students, drivers, pools, trips, step, filterPoolId]);
+return (
+  <div 
+    className="relative w-full overflow-hidden rounded-2xl" 
+    style={{ height }}
+  >
+    {/* Map is fixed inside this box */}
+    <div 
+      ref={mapDiv} 
+      className="absolute inset-0 !touch-none"
+      style={{ pointerEvents: showControls ? 'auto' : 'none' }}
+    />
 
-  return (
-    <div className="relative w-full rounded-2xl overflow-hidden" style={{ height }}>
-      <div ref={mapDiv} className="absolute inset-0" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/40 pointer-events-none" />
-    </div>
-  );
+    {/* Gradient overlay */}
+    <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/40 pointer-events-none" />
+  </div>
+);
+
+ 
 }
