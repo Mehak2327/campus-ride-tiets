@@ -7,10 +7,10 @@ import StudentAuth from "./pages/auth/StudentAuth";
 import DriverAuth from "./pages/auth/DriverAuth";
 import AdminAuth from "./pages/auth/AdminAuth";
 
-// DASHBOARDS
-import StudentDashboard from "./pages/dashboards/StudentDashboard";
-import DriverDashboard from "./pages/dashboards/DriverDashboard";
-import AdminDashboard from "./pages/dashboards/AdminDashboard";
+// DASHBOARDS  (FIXED PATHS)
+import StudentDashboard from "./pages/StudentDashboard";
+import DriverDashboard from "./pages/DriverDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 export default function App() {
   return (
