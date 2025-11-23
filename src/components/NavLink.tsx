@@ -7,11 +7,6 @@ export function NavLink({
   children,
   className,
   activeClassName = "",
-}: {
-  to: string;
-  children: React.ReactNode;
-  className?: string;
-  activeClassName?: string;
 }) {
   return (
     <RouterNavLink
