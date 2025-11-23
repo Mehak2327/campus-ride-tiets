@@ -35,7 +35,7 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     if (!currentUser || currentUser.role !== 'student') {
-      setCurrentUser({ role: 'student', id: 's1' });
+      
     }
   }, [currentUser]);
 

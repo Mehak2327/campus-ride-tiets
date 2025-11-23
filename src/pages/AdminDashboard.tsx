@@ -41,7 +41,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!currentUser || currentUser.role !== 'admin') {
-      navigate('/auth/admin');
+      navigate('/admin');
     }
   }, [currentUser, navigate]);
 

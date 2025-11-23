@@ -36,7 +36,8 @@ export default function DriverDashboard() {
 
   useEffect(() => {
     if (!currentUser || currentUser.role !== 'driver') {
-      setCurrentUser({ role: 'driver', id: 'd1' });
+      navigate("/driver");  // or no redirect at all
+
     }
   }, [currentUser]);
 

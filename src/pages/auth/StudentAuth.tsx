@@ -41,7 +41,8 @@ export default function StudentAuth() {
       {/* Back Button */}
       <Button
         variant="ghost"
-        onClick={() => navigate("/")}
+        onClick={() =>navigate("/student/dashboard");
+}
         className="absolute top-4 left-4 text-gray-600 hover:text-black"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
