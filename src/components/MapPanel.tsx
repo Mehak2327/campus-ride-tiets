@@ -14,7 +14,7 @@ L.Icon.Default.mergeOptions({
 interface MapPanelProps {
   height?: string;
   showControls?: boolean;
-  filterPoolId?: string; // optional: student view
+  filterPoolId?: string;
 }
 
 const PALETTE = {
@@ -34,7 +34,12 @@ function ll(hs: Hotspot[], id: string): [number, number] | null {
   return h ? [h.lat, h.lng] : null;
 }
 
-export default function MapPanel({ height = '600px', showControls = true, filterPoolId }: MapPanelProps) {
+export default function MapPanel({
+  height = '600px',
+  showControls = true,
+  filterPoolId
+}: MapPanelProps) {
+
   const mapDiv = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const layer = useRef<L.LayerGroup | null>(null);
@@ -46,7 +51,7 @@ export default function MapPanel({ height = '600px', showControls = true, filter
   const tripsA    = useAppStore(s => s.trips);
   const step      = useAppStore(s => s.demoStep);
 
-  // Optional pool filter (student page)
+  // Apply pool filter (student dashboard)
   const pools   = filterPoolId ? poolsA.filter(p => p.id === filterPoolId) : poolsA;
   const trips   = filterPoolId ? tripsA.filter(t => t.poolId === filterPoolId) : tripsA;
   const drivers = filterPoolId
@@ -56,18 +61,40 @@ export default function MapPanel({ height = '600px', showControls = true, filter
     ? studentsA.filter(st => pools.some(p => p.studentIds.includes(st.id)))
     : studentsA;
 
-  // Map init
+  // ==========================
+  // ⭐ MAP INIT (UPDATED)
+  // ==========================
   useEffect(() => {
     if (!mapDiv.current || map.current) return;
-    map.current = L.map(mapDiv.current, { center: [30.3558, 76.3651], zoom: 15, zoomControl: showControls });
+
+    map.current = L.map(mapDiv.current, {
+      center: [30.3558, 76.3651],
+      zoom: 15,
+      zoomControl: showControls,
+
+      // ⭐ FIX: Prevent map from moving on landing page
+      scrollWheelZoom: false,
+      dragging: false,
+      doubleClickZoom: false,
+      touchZoom: false
+    });
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
     }).addTo(map.current);
+
     layer.current = L.layerGroup().addTo(map.current);
-    return () => { map.current?.remove(); map.current = null; layer.current = null; };
+
+    return () => {
+      map.current?.remove();
+      map.current = null;
+      layer.current = null;
+    };
   }, [showControls]);
 
-  // Render logic
+  // ==========================
+  // ⭐ RENDER MARKERS, DRIVERS, POOLS, ROUTES
+  // ==========================
   useEffect(() => {
     if (!map.current || !layer.current) return;
     const g = layer.current;
@@ -76,7 +103,7 @@ export default function MapPanel({ height = '600px', showControls = true, filter
     // 0) Before seed: show nothing
     if (step === 'idle') return;
 
-    // Hotspot labels (subtle)
+    // Hotspots
     hotspots.forEach(h => {
       const icon = L.divIcon({
         className: 'hs',
@@ -89,7 +116,7 @@ export default function MapPanel({ height = '600px', showControls = true, filter
       L.marker([h.lat, h.lng], { icon }).addTo(g);
     });
 
-    // 1) After seed: 12 bluish-green dots
+    // Seeded: students
     if (step === 'seeded') {
       students.forEach(s => {
         const pos = ll(hotspots, s.pickup);
@@ -109,8 +136,7 @@ export default function MapPanel({ height = '600px', showControls = true, filter
       return;
     }
 
-    // 2) After pools: show only pool bubbles; bubbles attach to autos once trips start
-    // Draw autos + routes
+    // Drivers + autos + routes
     drivers.forEach(d => {
       const trip = trips.find(t => t.driverId === d.id);
       const pos = (trip?.currentPosition || [d.lat, d.lng]) as [number, number];
@@ -125,11 +151,16 @@ export default function MapPanel({ height = '600px', showControls = true, filter
           ">🚗</div>`,
         iconSize: [30,30], iconAnchor: [15,15],
       });
+
       L.marker(pos, { icon }).bindTooltip(`${d.name} • ${d.plate}`).addTo(g);
 
       if (trip?.route?.length) {
         const th = themeFor(pools.find(p => p.id === trip.poolId)!);
-        L.polyline(trip.route as [number, number][], { color: th.stroke, weight: 5, opacity: .9 }).addTo(g);
+        L.polyline(trip.route as [number, number][], {
+          color: th.stroke,
+          weight: 5,
+          opacity: .9
+        }).addTo(g);
       }
     });
 
@@ -137,6 +168,7 @@ export default function MapPanel({ height = '600px', showControls = true, filter
     pools.forEach(p => {
       const th = themeFor(p);
       const trip = trips.find(t => t.poolId === p.id);
+
       let pos: [number, number] | null = null;
       if (trip?.currentPosition) pos = trip.currentPosition;
       if (!pos) pos = ll(hotspots, p.pickup);
@@ -147,20 +179,27 @@ export default function MapPanel({ height = '600px', showControls = true, filter
         html: `<div style="
             display:flex;align-items:center;justify-content:center;
             width:38px;height:38px;border-radius:9999px;
-            background:${th.fill};border:4px solid ${th.stroke};
+            background:${th.fill};
+            border:4px solid ${th.stroke};
             box-shadow:0 0 0 8px ${th.stroke}33, 0 10px 30px rgba(2,6,23,.35);
             font-weight:700;color:#0f172a
         ">${p.studentIds.length}</div>`,
         iconSize: [38,38], iconAnchor: [19,19],
       });
+
       L.marker(pos, { icon: bubble })
         .bindTooltip(`Pool: ${p.id}\nPickup: ${p.pickup}\nDrop: ${p.drop}`)
         .addTo(g);
 
-      // final drop pin when completed
       if (trip && trip.status === 'completed') {
         const end = trip.route[trip.route.length - 1] as [number, number];
-        L.circleMarker(end, { radius: 6, color: th.stroke, weight: 3, fillColor: th.fill, fillOpacity: 1 })
+        L.circleMarker(end, {
+          radius: 6,
+          color: th.stroke,
+          weight: 3,
+          fillColor: th.fill,
+          fillOpacity: 1,
+        })
           .bindTooltip(`Dropped: ${p.drop}`)
           .addTo(g);
       }
