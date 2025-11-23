@@ -1,32 +1,26 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { LogOut, MapPin, Users, CheckCircle } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useAppStore } from "@/store/useAppStore";
-import MapPanel from "@/components/MapPanel";
 import { toast } from "sonner";
 
 export default function DriverDashboard() {
   const navigate = useNavigate();
-  const currentUser = useAppStore((state) => state.currentUser);
+  const currentUser = useAppStore((s) => s.currentUser);
 
-  // FIXED: clean redirect logic
   useEffect(() => {
-    if (!currentUser || currentUser.role !== "driver") {
-      navigate("/driver");
-    }
+    if (!currentUser) navigate("/driver");
   }, [currentUser]);
 
-  const drivers = useAppStore((state) => state.drivers);
-  const pools = useAppStore((state) => state.pools);
-  const students = useAppStore((state) => state.students);
+  const drivers = useAppStore((s) => s.drivers);
+  const pools = useAppStore((s) => s.pools);
+  const students = useAppStore((s) => s.students);
 
-  const verifyOtp = useAppStore((state) => state.verifyOtp);
-  const startTrips = useAppStore((state) => state.startTrips);
-  const completeTrips = useAppStore((state) => state.completeTrips);
-  const setCurrentUser = useAppStore((state) => state.setCurrentUser);
+  const verifyOtp = useAppStore((s) => s.verifyOtp);
+  const startTrips = useAppStore((s) => s.startTrips);
+  const completeTrips = useAppStore((s) => s.completeTrips);
+  const setCurrentUser = useAppStore((s) => s.setCurrentUser);
 
   const [otpInput, setOtpInput] = useState("");
 
@@ -47,14 +41,13 @@ export default function DriverDashboard() {
 
   return (
     <div className="min-h-screen bg-[#e8d8d9] p-8 rounded-3xl">
-
       <div className="max-w-7xl mx-auto">
-        {/* HEADER */}
+
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold neon-text">Driver Dashboard</h1>
             <p className="text-muted-foreground mt-1">
-              {driver ? `${driver.name} • ${driver.plate}` : "Welcome back"}
+              {driver ? `${driver.name} • ${driver.plate}` : "Welcome"}
             </p>
           </div>
 
@@ -63,7 +56,7 @@ export default function DriverDashboard() {
           </Button>
         </div>
 
-        {/* REST UI SAME */}
+        {/* Keep your remaining UI here */}
       </div>
     </div>
   );
