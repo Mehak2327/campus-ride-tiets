@@ -22,7 +22,12 @@ export default function DriverAuth() {
     e.preventDefault();
 
     if (email && password) {
+      // Load demo data for drivers
+      useAppStore.getState().seedDemo();
+
+      // Log in as demo driver d1
       setCurrentUser({ role: "driver", id: "d1" });
+
       toast.success("Logged in successfully!");
       navigate("/driver/dashboard");
     } else {
@@ -33,7 +38,6 @@ export default function DriverAuth() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#E6DADA] p-4">
 
-      {/* BACK BUTTON */}
       <Button
         variant="ghost"
         onClick={() => navigate("/")}
@@ -43,5 +47,7 @@ export default function DriverAuth() {
         Back
       </Button>
 
-      {/* AUTH UI BELOW (unchanged) */}
-      {/* PASTE REMAINING CONTENT HERE */}
+      {/* AUTH UI (your existing UI here) */}
+    </div>
+  );
+}

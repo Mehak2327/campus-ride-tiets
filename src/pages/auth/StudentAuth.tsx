@@ -22,7 +22,12 @@ export default function StudentAuth() {
     e.preventDefault();
 
     if (email && password) {
+      // Load student-only demo data
+      useAppStore.getState().initStudentOnlyDemo();
+
+      // Log in as student s1
       setCurrentUser({ role: "student", id: "s1" });
+
       toast.success("Logged in successfully!");
       navigate("/student/dashboard");
     } else {
@@ -33,7 +38,6 @@ export default function StudentAuth() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#E6DADA] p-4">
 
-      {/* BACK BUTTON */}
       <Button
         variant="ghost"
         onClick={() => navigate("/")}
@@ -43,5 +47,7 @@ export default function StudentAuth() {
         Back
       </Button>
 
-      {/* AUTH UI BELOW (unchanged) */}
-      {/* PASTE YOUR REMAINING UI CONTENT HERE */}
+      {/* AUTH UI (your existing UI here) */}
+    </div>
+  );
+}

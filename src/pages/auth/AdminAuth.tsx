@@ -19,16 +19,22 @@ export default function AdminAuth() {
     e.preventDefault();
 
     if (email && password) {
-      setCurrentUser({ role: "admin", id: "a1" });
+      // Load demo data
+      useAppStore.getState().seedDemo();
+
+      // Log in as admin (no ID needed since admin is not data-linked)
+      setCurrentUser({ role: "admin", id: "admin" });
+
       toast.success("Logged in successfully!");
       navigate("/admin/dashboard");
-    } else toast.error("Please fill all fields");
+    } else {
+      toast.error("Please fill all fields");
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#E6DADA] p-4">
 
-      {/* BACK BUTTON */}
       <Button
         variant="ghost"
         onClick={() => navigate("/")}
@@ -38,4 +44,7 @@ export default function AdminAuth() {
         Back
       </Button>
 
-      {/* AUTH UI BELOW (unchanged) */}
+      {/* AUTH UI (your existing UI here) */}
+    </div>
+  );
+}
