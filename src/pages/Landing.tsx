@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 
 export default function Landing() {
   return (
-    <div className="w-full min-h-screen bg-[#f8f6f7] text-[#111827]">
+    <div className="w-full min-h-screen bg-[#f8f6f7] text-[#111827] pt-20">
       {/* NAVBAR */}
       <ThaparNavbar />
 
@@ -49,23 +49,22 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
       {/* LIVE MAP SECTION */}
-<section className="py-24 bg-[#f8f6f7]">
-  <div className="max-w-6xl mx-auto px-6 text-center">
-    <h2 className="text-3xl font-bold mb-10">Live demo map preview</h2>
+      <section className="py-24 bg-[#f8f6f7]">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold mb-10">Live demo map preview</h2>
 
-    {/* ⭐ FIXED MAP CONTAINER */}
-    <div className="w-full max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-xl"
-         style={{ height: "500px" }}>
-      <MapPanel height="500px" showControls={false} />
-    </div>
-  </div>
-</section>
+          <div
+            className="w-full max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-xl"
+            style={{ height: "500px" }}
+          >
+            <MapPanel height="500px" showControls={false} />
+          </div>
+        </div>
+      </section>
 
-
-   
-
-      {/* SINGLE FOOTER */}
+      {/* FOOTER */}
       <Footer />
     </div>
   );
