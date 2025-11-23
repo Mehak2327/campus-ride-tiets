@@ -5,18 +5,18 @@ export default function HeroThapar() {
   const navigate = useNavigate();
 
   return (
-    <header className="relative h-[85vh] flex items-center justify-start">
+    <header className="relative h-[85vh] flex items-center justify-start z-0">
 
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-center pointer-events-none"
         style={{ backgroundImage: "url('/thapar.jpg')" }}
       />
 
-      {/* Very Soft Dark Overlay */}
-      <div className="absolute inset-0 bg-black/20" />
+      {/* Soft Dark Overlay */}
+      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
-      {/* LEFT ALIGNED CONTENT */}
+      {/* LEFT CONTENT */}
       <div className="relative z-10 max-w-3xl px-16 text-left">
         <h1 className="text-5xl font-extrabold text-white leading-tight drop-shadow">
           Thapar Campus Mobility Service
