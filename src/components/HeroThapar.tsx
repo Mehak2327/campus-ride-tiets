@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function HeroThapar() {
+  const navigate = useNavigate();
+
   return (
     <header className="relative h-[85vh] flex items-center justify-start">
 
@@ -25,29 +28,29 @@ export default function HeroThapar() {
         </p>
 
         <div className="mt-8 flex justify-start gap-4">
-          {/* DEMO → ADMIN PORTAL */}
-          <a
-            href="/auth/AdminAuth"
+          {/* ADMIN DEMO */}
+          <button
+            onClick={() => navigate("/admin")}
             className="px-7 py-3 bg-[#AA0000] rounded-full text-white text-lg font-semibold shadow-lg hover:bg-[#8a0000] transition"
           >
             Demo
-          </a>
+          </button>
 
           {/* STUDENT LOGIN */}
-          <a
-            href="/auth/StudentAuth"
+          <button
+            onClick={() => navigate("/student")}
             className="px-7 py-3 rounded-full border border-white/70 text-white text-lg font-semibold backdrop-blur-sm hover:bg-white/20 transition"
           >
             Student Login
-          </a>
+          </button>
 
           {/* DRIVER LOGIN */}
-          <a
-            href="/auth/DriverAuth"
+          <button
+            onClick={() => navigate("/driver")}
             className="px-7 py-3 rounded-full border border-white/70 text-white text-lg font-semibold backdrop-blur-sm hover:bg-white/20 transition"
           >
             Driver Login
-          </a>
+          </button>
         </div>
       </div>
 
