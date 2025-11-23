@@ -49,14 +49,21 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      {/* LIVE MAP SECTION */}
+<section className="py-24 bg-[#f8f6f7]">
+  <div className="max-w-6xl mx-auto px-6 text-center">
+    <h2 className="text-3xl font-bold mb-10">Live demo map preview</h2>
 
-      {/* LIVE MAP SECTION (RESTORED) */}
-      <section className="py-24 bg-[#f8f6f7]">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-8">Live demo map preview</h2>
-          <MapPanel />
-        </div>
-      </section>
+    {/* ⭐ FIXED MAP CONTAINER */}
+    <div className="w-full max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-xl"
+         style={{ height: "500px" }}>
+      <MapPanel height="500px" showControls={false} />
+    </div>
+  </div>
+</section>
+
+
+   
 
       {/* SINGLE FOOTER */}
       <Footer />
